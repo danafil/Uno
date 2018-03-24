@@ -1,0 +1,134 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: rgb(12, 83, 33);
+  display: flex;
+  justify-content: center;
+}
+* {
+    box-sizing: border-box;
+}
+.color-selector {
+  list-style-type: none;
+}
+
+.card {
+  display: -webkit-flex; 
+  -webkit-align-items: center; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90px;
+  height: 130px;
+  border: 3px solid #ffffff;
+  border-radius: 6px;
+  padding: 5px;
+  background: linear-gradient(red, yellow, green, blue);
+  box-shadow: 3px 3px 3px rgb(43, 42, 42);
+}
+
+
+.card--yellow {
+  background: yellow;
+}
+
+.card--blue {
+  background: blue;
+}
+
+.card--red {
+  background: red;
+}
+
+.card--green {
+  background: green;
+}
+
+.card-item {
+  width: 80px;
+  margin: 0 5px 0 5px;
+  padding-top: 10px;
+  height: 100px;
+  border-top-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  background-color: white;
+  font-size: 65px;
+  color: rgb(19, 18, 18);
+  text-align: center;
+  text-shadow: 1px 1px rgb(61, 61, 61);
+}
+
+.table-card {
+  width: 90px;
+  height: 130px;
+  border: 2px rgb(255, 255, 255) solid;
+  border-radius: 6px;
+}
+
+.player-card {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+  flex-wrap: nowrap;
+}
+
+.table-cards {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+}
+
+.backside-card {
+  margin: 0;
+  color: rgb(238, 230, 185);
+  font-weight: bold;
+  border-left-color: yellow;
+  border-right-color: red;
+  border-top-color: yellow;
+  border-bottom-color: red;
+}
+.pl-index0, .pl-index1 {
+  background-color: rgb(10, 163, 36);
+}
+
+.pl-index0 {
+  order: 1;
+}
+
+.pl-index1 {
+  order: 3;
+}
+
+.table {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  order: 2;
+  margin: 40px 40px 0 40px;
+}
+
+.color-selector {
+  margin-left: 30px;
+  padding-left: 0px;
+  border: 5px solid white;
+  border-bottom-left-radius: 10px; 
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  box-shadow: 3px 3px 3px rgb(43, 42, 42);
+}
+
+.color-selector li { 
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+h2 {
+  color: white;
+}
+
+.deck-cards {
+  margin: 0 40px;
+}
