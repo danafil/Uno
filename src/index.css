@@ -26,6 +26,7 @@ body {
   padding: 5px;
   background: linear-gradient(red, yellow, green, blue);
   box-shadow: 3px 3px 3px rgb(43, 42, 42);
+  cursor: pointer;
 }
 
 
@@ -46,14 +47,14 @@ body {
 }
 
 .card-item {
-  width: 80px;
+  width: 70px;
   margin: 0 5px 0 5px;
   padding-top: 10px;
-  height: 100px;
+  height: 90px;
   border-top-left-radius: 40px;
   border-bottom-right-radius: 40px;
   background-color: white;
-  font-size: 65px;
+  font-size: 60px;
   color: rgb(19, 18, 18);
   text-align: center;
   text-shadow: 1px 1px rgb(61, 61, 61);
@@ -129,6 +130,28 @@ h2 {
   color: white;
 }
 
+.player-title {
+  color: white;
+}
+
+.player-title--active {
+  color: red;
+}
+
+
 .deck-cards {
   margin: 0 40px;
+}
+
+.gameOver {
+  height: 100%;
+  width: 100%;
+  padding-top: 200px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(6, 12, 8, 0.8);
+  color: white;
+  text-align: center;
+  z-index: 100;
 }
