@@ -1,40 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Refresh from './refresh.svg';
-import Ban from './ban.svg';
 
 function Card(props) {
-  if (!props.open) {
-    return (
-      <div className="card">
-        <p className="backside-card">UNO</p>
-      </div>
-    )
-  } else if (props.type === "r") {
-    return (
-      <div className={`card card--${props.color}`}>
-        <p className='card-item'>
-          <img src={Refresh} alt="reverse" />
-        </p>
-      </div>
-    )
-  } else if (props.type === "o") {
-    return (
-      <div className={`card card--${props.color}`}>
-        <p className='card-item'>
-          <img src={Ban} alt="skip player" width="50" />
-        </p>
-      </div>
-    )
-  } else {
-    return (
-      <div className={`card card--${props.color}`}>
-        <p className='card-item'>
-          {props.type}
-        </p>
-      </div>
-    )
-  }
+
+  let cardClass = props.color && props.open ? `card card--${props.color}` : 'card';
+  cardClass += props.vertical ? ' card--vertical' : '';
+  const pClass = props.open ? 'card-type' : 'backside-card';
+  const content = props.open ? getContent(props.type) : 'UNO' ;
+
+  return (
+    <li className={cardClass} onClick={props.onClick}>
+      <p className={pClass}>
+        <span className="card-icon-top">{content}</span>
+        <span className="card-icon-center">{content}</span>
+        <span className="card-icon-bottom">{content}</span>
+      </p>
+    </li>
+  )
 }
 
 Card.propTypes = {
@@ -44,6 +26,17 @@ Card.propTypes = {
     PropTypes.object
   ]),
   type: PropTypes.string.isRequired
+}
+
+function getContent(type) {
+  switch (type) {
+    case 'r':
+     return <i className="icon-blocked"></i>;
+    case 'o':
+      return <i className="icon-loop2"></i>;
+    default:
+      return type;
+  }
 }
 
 export default Card; 

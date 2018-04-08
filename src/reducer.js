@@ -1,4 +1,5 @@
 import { PLAYER_PLAYED, TAKE_CARDS, TAKE_NEW_CARD } from './actions';
+import Card from './models';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -7,7 +8,7 @@ const reducer = (state, action) => {
     case TAKE_CARDS:
       return handleTakeCards(state, action.player);
     case TAKE_NEW_CARD:
-      return handelTakeNewCard(state, action.player);
+      return handleTakeNewCard(state, action.player);
     default:
       return state;
   }
@@ -18,8 +19,11 @@ function handleTakeCards(state, player) {
   const card = getLastTableCard(table);
   if (card.type[0] === '+') {
     const count = +card.type[1];
-    const cardsToTake = deck.slice(0, count);
-    const nextDeck = deck.slice(count);
+    const {
+      cards: cardsToTake, 
+      deck: nextDeck,
+      table: nextTable
+    } = takeCards(count, deck, table);
 
     const index = players.indexOf(player);
     const nextPlayer = {
@@ -36,6 +40,7 @@ function handleTakeCards(state, player) {
     return {
       ...state,
       deck: nextDeck,
+      table: nextTable,
       players: nextPlayers,
       lastPlayerIndex: index,
       mustTakeCards: false,
@@ -66,8 +71,8 @@ function handlePlay(state, action) {
 }
 
 function playCard(state, card, player) {
-  const { players, table, lastPlayerIndex, skipTurn } = state;
-  const nextPlayer = getNextPlayerIndex(lastPlayerIndex, players, skipTurn);
+  const { players, table, lastPlayerIndex, skipTurn, direction } = state;
+  const nextPlayer = getNextPlayerIndex(lastPlayerIndex, players, skipTurn, direction);
   
   if (nextPlayer === player) {
     const playerIndex = players.indexOf(player);
@@ -104,23 +109,27 @@ function playCard(state, card, player) {
       table: nextTable,
       lastPlayerIndex: playerIndex,
       mustTakeCards: card.type[0] === '+',
-      skipTurn: card.type === 'o' || card.type === 'r'
+      skipTurn: card.type === 'o',
+      direction: card.type === 'r' ? reverse(direction) : direction
     }
   } else {
     return state;
   } 
 }
 
-function handelTakeNewCard(state, player) {
-  const { deck, players, lastPlayerIndex, skipTurn } = state;
-  const nextPlayer = getNextPlayerIndex(lastPlayerIndex, players, skipTurn);
+function handleTakeNewCard(state, player) {
+  const { deck, table, players, lastPlayerIndex, skipTurn, direction } = state;
+  const nextPlayer = getNextPlayerIndex(lastPlayerIndex, players, skipTurn, direction);
   const index = players.indexOf(player);
   if (nextPlayer === player) {
-    const cardToTake = deck.slice(0, 1);
-    const nextDeck = deck.slice(1);
+    const {
+      cards: cardsToTake, 
+      deck: nextDeck,
+      table: nextTable
+    } = takeCards(1, deck, table);
     const currPlayer = {
       name: player.name,
-      cards: player.cards.concat(cardToTake)
+      cards: player.cards.concat(cardsToTake)
     };
     const nextPlayers = [
       ...players.slice(0, index),
@@ -131,6 +140,7 @@ function handelTakeNewCard(state, player) {
       ...state,
       players: nextPlayers,
       deck: nextDeck,
+      table: nextTable,
       lastPlayerIndex: index,
       mustTakeCards: false,
       skipTurn: false
@@ -151,12 +161,60 @@ function isCardValid(card, table) {
     card.type === '+4'
 }
 
-function getNextPlayerIndex(lastPlayerIndex, players, skipTurn) {
-  let nextTurnIndex = lastPlayerIndex < players.length - 1 ? lastPlayerIndex + 1 : 0;
-  if (skipTurn) {
-    nextTurnIndex = nextTurnIndex < players.length - 1 ? nextTurnIndex + 1 : 0;
-  }
+function getNextPlayerIndex(lastPlayerIndex, players, skipTurn, direction) {
+  const move = direction === 'cw' ? 1 : -1;
+  const jump = skipTurn ? 2 : 1;
+  const nextTurnIndex = (lastPlayerIndex + players.length + move*jump) % players.length;
   return players[nextTurnIndex];
 }
+
+function reverse(direction) {
+  return direction === 'cw' ? 'ccw' : 'cw' ;
+}
+
+function takeCards(n, deck, table) {
+  if (deck.length > n) {
+    return {
+      cards: deck.slice(0, n),
+      deck: deck.slice(n),
+      table
+    }
+  } else {
+    const { deck: nextDeck, table: nextTable } = renewDeck(deck, table);
+    console.log('RENEW', nextDeck, nextTable);
+    return takeCards(n, nextDeck, nextTable);
+  }
+}
+
+function renewDeck(deck, table) {
+  const cards = resetCards(shuffle(table.slice(0, table.length - 1)));
+  return {
+    deck: deck.concat(cards),
+    table: table.slice(table.length - 1)
+  }
+}
+
+function resetCards(deck) {
+  return deck.map( c => {
+    if (c.type === '+4') {
+      return new Card(c.type, null)
+    }
+
+    return c;
+  })
+}
+
+function shuffle(arr) {
+  var i = 0
+    , j = 0
+    , temp = null;
+  for (i = arr.length - 1; i > 0; i -= 1) {
+    j = Math.floor(Math.random() * (i + 1))
+    temp = arr[i]
+    arr[i] = arr[j]
+    arr[j] = temp
+  }
+  return arr;
+};
 
 export default reducer;

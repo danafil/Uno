@@ -45,7 +45,7 @@ function shuffle(arr) {
 const initializeDeck = () => {
   const recShuffle = (deck) => {
     shuffle(deck);
-    if (deck[14].type[0] === '+' ) {
+    if (deck[28].type[0] === '+' ) {
       recShuffle(deck);
     } 
   };
@@ -59,7 +59,9 @@ const deck = initializeDeck();
 
 const players = [
   {name: 'You', cards: deck.splice(0, 7)},
-  {name: 'Bot', cards: deck.splice(0, 7)}
+  {name: 'Bot1', cards: deck.splice(0, 7)},
+  {name: 'Bot2', cards: deck.splice(0, 7)},
+  {name: 'Bot3', cards: deck.splice(0, 7)}
 ];
 
 const table = [deck.shift()];
@@ -68,9 +70,10 @@ export const InitialState = {
   deck,
   players,
   table,
-  lastPlayerIndex: 1,
+  lastPlayerIndex: 3,
   mustTakeCards: false,
   skipTurn: false,
+  direction: 'cw',
   winner: null
 };
 
