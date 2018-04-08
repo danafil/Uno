@@ -16,30 +16,30 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { 
-      player,  
-      table, 
+    const {
+      player,
+      table,
       lastPlayerIndex,
-      mustTakeCards, 
+      mustTakeCards,
       players,
-      winner 
+      winner
     } = this.props;
     const nextPlayer = this.getNextPlayer(lastPlayerIndex, players);
     if (mustTakeCards) {
-      setTimeout(() => this.props.takeCards(nextPlayer), 800);
+      setTimeout(() => this.props.takeCards(nextPlayer), 1500);
     } else if (nextPlayer !== player && !winner) {
-      setTimeout(() => this.playNext(nextPlayer, table, lastPlayerIndex), 800)
+      setTimeout(() => this.playNext(nextPlayer, table, lastPlayerIndex), 1500)
     }
   }
 
   playNext(player, table, lastPlayerIndex) {
     const tableCard = table[table.length - 1];
-      const botCard = this.getBotCard(tableCard, player.cards);
-      if (botCard) {
-        this.props.play(botCard, player.name);
-      } else {
-        this.props.takeNewCard(player);
-      }
+    const botCard = this.getBotCard(tableCard, player.cards);
+    if (botCard) {
+      this.props.play(botCard, player.name);
+    } else {
+      this.props.takeNewCard(player);
+    }
   }
 
   getBotCard(tableCard, cards) {
@@ -52,7 +52,7 @@ class App extends Component {
     }
     return card || null;
   }
-  
+
   getBotColor(cards) {
     const colors = {
       red: 0,
@@ -66,15 +66,14 @@ class App extends Component {
       }
       return acc;
     }, colors);
-  
+
     return Object.keys(m).reduce((prev, next) => m[prev] < m[next] ? next : prev);
   }
 
   getNextPlayer(lastPlayerIndex, players) {
-    let nextTurnIndex = lastPlayerIndex < players.length - 1 ? lastPlayerIndex + 1 : 0;
-    if (this.props.skipTurn) {
-      nextTurnIndex = nextTurnIndex < players.length - 1 ? nextTurnIndex + 1 : 0;
-    }
+    const move = this.props.direction === 'cw' ? 1 : -1;
+    const jump = this.props.skipTurn ? 2 : 1;
+    const nextTurnIndex = (lastPlayerIndex + players.length + move*jump) % players.length;
     return players[nextTurnIndex];
   }
 
@@ -92,7 +91,7 @@ class App extends Component {
   }
 
   pickColor = (color) => {
-    const {card, name} = this.state;
+    const { card, name } = this.state;
     this.setState({
       pickColor: false,
       card: null,
@@ -102,67 +101,78 @@ class App extends Component {
   }
 
   render() {
-    const { 
-      player, 
-      bot, 
-      table, 
-      lastPlayerIndex, 
+    const {
+      player,
+      table,
+      lastPlayerIndex,
       players,
-      winner 
+      winner
     } = this.props;
-
+    const [bot1, bot2, bot3] = [players[1], players[2], players[3]];
     const nextPlayer = this.getNextPlayer(lastPlayerIndex, players);
     return (
       <div className="App">
-        {winner && <Winner name={nextPlayer.name}/>}
-        <section className="player">
+        {winner && <Winner name={nextPlayer.name} />}
+        <div className="col-1">
           <Player
-            name={bot.name}
-            cards={bot.cards}
+            name={bot1.name}
+            cards={bot1.cards}
             onPlay={this.props.play}
-            active={bot === nextPlayer}
+            active={bot1 === nextPlayer}
+            vertical
           />
-        </section>
-        <section className="table">
-          <div className="deck-cards card backside-card" onClick={
-            () => this.props.takeNewCard(nextPlayer)
-          }>
-            Take card
-          </div>
-          <div>
+        </div>
+        <div className="col-2">
+          <Player
+            name={bot2.name}
+            cards={bot2.cards}
+            onPlay={this.props.play}
+            active={bot2 === nextPlayer}
+          />
+          <ul className="deck-cards">
+            <li className="card backside-card" onClick={
+              () => this.props.takeNewCard(nextPlayer)
+            }>Take card</li>
             <Card type={table[table.length - 1].type} color={table[table.length - 1].color} open={true} />
-          </div>
-          {this.state.pickColor && (
-            <ul className="color-selector" onClick={(e) => { this.pickColor(e.target.innerText) }}>
-              <li className="card--red">red</li>
-              <li className="card--green">green</li>
-              <li className="card--yellow">yellow</li>
-              <li className="card--blue">blue</li>
-            </ul>
-          )}
-        </section>
-        <section className="player">
+            {this.state.pickColor && (
+              <ul className="color-selector" onClick={(e) => { this.pickColor(e.target.innerText) }}>
+                <li className="card--red">red</li>
+                <li className="card--green">green</li>
+                <li className="card--yellow">yellow</li>
+                <li className="card--blue">blue</li>
+              </ul>
+            )}
+          </ul>
           <Player
             name={player.name}
             cards={player.cards}
             onPlay={this.play}
             active={player === nextPlayer}
           />
-        </section>
+        </div>
+        <div className="col-3">
+          <Player
+            name={bot3.name}
+            cards={bot3.cards}
+            onPlay={this.props.play}
+            active={bot3 === nextPlayer}
+            vertical
+          />
+        </div>
       </div>
-    ); 
+    );
   }
 }
 
 const mapStateToProps = state => ({
   player: state.players[0],
-  bot: state.players[1],
   table: state.table,
   turnIndex: state.turnIndex,
   lastPlayerIndex: state.lastPlayerIndex,
   mustTakeCards: state.mustTakeCards,
   skipTurn: state.skipTurn,
   players: state.players,
+  direction: state.direction,
   winner: state.winner
 });
 

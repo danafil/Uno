@@ -1,0 +1,25 @@
+.player {
+  background-color: rgb(12, 83, 33);
+  min-height: 200px;
+
+  .player-title {
+    color: white;
+    margin-left: 30px;
+  }
+  
+  .player-title--active {
+    color: red;
+    margin-left: 30px;
+  }
+
+  .player-cards {
+    display: flex;
+    position: relative;
+    padding: 0;
+  }
+
+  .player-cards--vertical {
+    flex-direction: column;
+    margin-top: -20px;
+  }
+}

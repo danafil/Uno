@@ -1,0 +1,103 @@
+@import './scss/player';
+@import './scss/card';
+@import './scss/fonts';
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: rgb(12, 83, 33);
+}
+* {
+    box-sizing: border-box;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.col-1, .col-3 {
+  flex: 1;
+}
+
+.col-2 {
+  flex: 2;
+}
+
+.color-selector {
+  list-style-type: none;
+}
+
+.card--yellow {
+  background: yellow;
+}
+
+.card--blue {
+  background: blue;
+}
+
+.card--red {
+  background: red;
+}
+
+.card--green {
+  background: green;
+}
+
+.table-card {
+  width: 90px;
+  height: 130px;
+  border: 2px rgb(255, 255, 255) solid;
+  border-radius: 6px;
+}
+
+.table-cards {
+  padding: 0;
+  list-style-type: none;
+}
+
+.color-selector {
+  margin-left: 60px;
+  padding-left: 0px;
+  border: 5px solid white;
+  border-bottom-left-radius: 10px; 
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  box-shadow: 3px 3px 3px rgb(43, 42, 42);
+}
+
+.color-selector li { 
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.deck-cards {
+  margin: 0 40px;
+  display: flex;
+
+  .card {
+    position: relative;
+    left: 50px;
+  }
+}
+
+.gameOver {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding-top: 25%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(6, 12, 8, 0.8);
+  color: white;
+  text-align: center;
+  z-index: 100;
+}

@@ -1,0 +1,81 @@
+.card {
+  display: -webkit-flex;
+  -webkit-align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 90px;
+  height: 130px;
+  border: 3px solid #ffffff;
+  border-radius: 6px;
+  padding: 5px;
+  background: linear-gradient(red, yellow, green, blue);
+  box-shadow: 3px 3px 3px #2b2a2a;
+  cursor: pointer; 
+
+  .card-type {
+    width: 70px;
+    margin: 0 5px 0 5px;
+    padding-top: 10px;
+    height: 90px;
+    border-top-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    background-color: white;
+    font-size: 60px;
+    font-weight: bold;
+    color: rgb(19, 18, 18);
+    text-align: center;
+
+    .card-icon-top {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .card-icon-bottom {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      font-size: 18px;
+      font-weight: bold;
+      -ms-transform: rotate(180deg); 
+      -webkit-transform: rotate(180deg); 
+      transform: rotate(180deg);
+      color: white;
+    }
+
+  } 
+
+  .backside-card {
+    margin: 0;
+    color: rgb(238, 230, 185);
+    font-weight: bold;
+    border-left-color: yellow;
+    border-right-color: red;
+    border-top-color: yellow;
+    border-bottom-color: red;
+
+    .card-icon-top, .card-icon-bottom {
+      display: none;
+    }
+  }
+}
+
+@for $i from 0 through 52 {
+  .card:nth-child(#{$i}) {
+    left: 35px * $i
+  }
+}
+
+@for $i from 1 through 52 {
+  .card--vertical:nth-child(#{$i}) {
+    left: 0;
+    right: 0;
+    margin: auto;
+    top: 20px * $i;
+  }
+}
